@@ -1,6 +1,7 @@
 package fr.alexpado.mareu.repositories;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.interfaces.repositories.UserRepository;
@@ -22,6 +23,23 @@ public class FakeUserRepository extends FakeRepository<User> implements UserRepo
         this.save(new User("c.dion@lamzone.fr"));
         this.save(new User("d.balavoine@lamzone.fr"));
         this.save(new User("p.bruel@lamzone.fr"));
+    }
+
+    /**
+     * Tries to find a {@link User} by the provided mail.
+     *
+     * @param mail
+     *         The {@link User}'s mail.
+     *
+     * @return A {@link User}, if found.
+     */
+    @Override
+    public Optional<User> findByMail(String mail) {
+
+        return this.findAll()
+                   .stream()
+                   .filter(user -> user.getMail().equalsIgnoreCase(mail))
+                   .findFirst();
     }
 
 }
