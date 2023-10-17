@@ -1,6 +1,5 @@
 package fr.alexpado.mareu.entities;
 
-import java.util.List;
 import java.util.Objects;
 
 import fr.alexpado.mareu.interfaces.Entity;
@@ -10,8 +9,8 @@ import fr.alexpado.mareu.interfaces.Entity;
  */
 public class Room implements Entity {
 
-    private Long          id;
-    private String        name;
+    private Long   id;
+    private String name;
 
     public Room(String name) {
 

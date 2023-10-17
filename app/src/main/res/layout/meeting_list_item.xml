@@ -5,32 +5,35 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="@dimen/text_margin">
 
 
     <ImageView
             android:id="@+id/meeting_list_item_thumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            app:srcCompat="@drawable/pouet" />
 
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="24dp"
-            android:gravity="center">
+            android:layout_marginStart="10dp"
+            android:layout_weight="1">
 
         <TextView
                 android:id="@+id/meeting_list_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                tools:text="--------------" />
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="--------------"
+                android:textSize="20sp" />
 
         <TextView
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="--------------"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +43,7 @@
 
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical|end">
 
@@ -49,8 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/baseline_delete_24"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp" />
+                android:backgroundTint="@color/design_default_color_error"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin" />
     </LinearLayout>
 
 </LinearLayout>

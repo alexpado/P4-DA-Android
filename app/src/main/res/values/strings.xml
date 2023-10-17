@@ -3,10 +3,14 @@
 
     <string name="fab_add_meeting">Book a meeting</string>
 
+    <string name="menu_filter">Filter</string>
+
     <string name="add_meeting_subject">Meeting Subject</string>
     <string name="add_meeting_room">Meeting Room</string>
     <string name="add_meeting_time">Meeting Time</string>
     <string name="add_meeting_time_set">Set Time</string>
     <string name="add_meeting_validate">Book Meeting</string>
     <string name="add_meeting_validation_failed">Please check any fields for errors.</string>
+
+    <string name="participant_mail">Participant Mail</string>
 </resources>

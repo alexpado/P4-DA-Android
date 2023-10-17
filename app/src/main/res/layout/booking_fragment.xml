@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -9,11 +11,12 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:hint="@string/add_meeting_subject"
-            android:padding="10dp">
+            android:padding="@dimen/text_margin">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_meeting_subject"
                 android:layout_width="match_parent"
+                android:inputType="text"
                 android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -23,24 +26,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/add_meeting_room"
-            android:padding="10dp">
+            android:padding="@dimen/text_margin">
 
         <AutoCompleteTextView
                 android:id="@+id/add_meeting_room"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                />
+                android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            android:layout_weight="1">
+            android:padding="@dimen/text_margin">
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_meeting_time_container"
@@ -48,8 +48,8 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:hint="@string/add_meeting_time"
-                android:padding="10dp"
                 android:layout_weight="1"
+                android:inputType="text"
                 android:enabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,16 +62,50 @@
         <Button
                 android:id="@+id/add_meeting_time_set"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="@string/add_meeting_time_set"
                 style="@style/Widget.MaterialComponents.Button.TextButton" />
     </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/text_margin"
+            />
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:hint="@string/participant_mail"
+            android:padding="@dimen/text_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_participant_mail"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/participant_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_participants_item"
+            android:layoutMode="clipBounds" />
 
     <Button
             android:id="@+id/add_meeting_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_meeting_validate"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
-
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_margin="@dimen/text_margin" />
 </LinearLayout>
+

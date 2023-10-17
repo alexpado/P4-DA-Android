@@ -1,11 +1,15 @@
 package fr.alexpado.mareu.services;
 
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import fr.alexpado.mareu.InjectionStore;
+import fr.alexpado.mareu.data.BookingFragmentData;
 import fr.alexpado.mareu.entities.Meeting;
 import fr.alexpado.mareu.entities.Room;
 import fr.alexpado.mareu.entities.User;
@@ -16,25 +20,27 @@ import fr.alexpado.mareu.interfaces.repositories.MeetingRepository;
  */
 public class MeetingService {
 
-    private final MeetingRepository repository;
+    private final MeetingRepository               repository;
+    private final Map<String, Predicate<Meeting>> filters = new HashMap<>();
 
     public MeetingService(MeetingRepository repository) {
 
         this.repository = repository;
-
-        this.randomize(
-                InjectionStore.roomService(),
-                InjectionStore.userService(),
-                3
-        );
     }
 
-    /**
-     * Remove all registered {@link Meeting}
-     */
-    public void reset() {
+    public void applyFilter(String filterName, Predicate<Meeting> predicate) {
 
-        this.repository.findAll().clear();
+        this.filters.put(filterName, predicate);
+    }
+
+    public void removeFilter(String filterName) {
+
+        this.filters.remove(filterName);
+    }
+
+    public boolean hasFilter(String filterName) {
+
+        return this.filters.containsKey(filterName);
     }
 
     /**
@@ -49,13 +55,27 @@ public class MeetingService {
      *
      * @return The saved {@link Meeting}.
      */
-    public Meeting book(Room room, LocalTime time, String subject) {
+    public Meeting book(Room room, LocalTime time, String subject, Collection<User> participants) {
 
         Meeting meeting = new Meeting();
         meeting.setLocation(room);
         meeting.setTime(time);
         meeting.setSubject(subject);
+        meeting.getParticipants().addAll(participants);
         return this.repository.save(meeting);
+    }
+
+    /**
+     * reate a new {@link Meeting} using the provided data.
+     *
+     * @param data
+     *         A {@link BookingFragmentData} containing user inputs for the {@link Meeting}
+     *
+     * @return The saved {@link Meeting}
+     */
+    public Meeting book(BookingFragmentData data) {
+
+        return this.book(data.getRoom(), data.getTime(), data.getSubject(), data.getParticipants());
     }
 
     /**
@@ -76,31 +96,17 @@ public class MeetingService {
      */
     public List<Meeting> getAll() {
 
-        return this.repository.findAll();
-    }
-
-    public void randomize(RoomService roomService, UserService userService, int count) {
-
-        int amountGenerated = 0;
-
-        while (amountGenerated < count) {
-
-            List<Room> rooms = roomService.getRooms();
-            List<User> users = userService.getUsers();
-
-            Random rng         = new Random();
-            int    userPerRoom = 3;
-
-            Room    room    = rooms.get(rng.nextInt(rooms.size()));
-            Meeting meeting = this.book(room, LocalTime.now(), "Lorem Ipsum");
-            meeting.setSubject("Lorem Ipsum (ID " + meeting.getId() + ")");
-
-            for (int i = 0; i < userPerRoom; i++) {
-                meeting.getParticipants().add(users.get(rng.nextInt(users.size())));
-            }
-
-            amountGenerated++;
+        if (this.filters.isEmpty()) {
+            return this.repository.findAll();
         }
+
+        Stream<Meeting> stream = this.repository.findAll().stream();
+
+        for (Predicate<Meeting> predicate : this.filters.values()) {
+            stream = stream.filter(predicate);
+        }
+
+        return stream.collect(Collectors.toList());
     }
 
 }

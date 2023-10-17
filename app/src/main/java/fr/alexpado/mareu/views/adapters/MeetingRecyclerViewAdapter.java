@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import fr.alexpado.mareu.AppUtils;
 import fr.alexpado.mareu.R;
 import fr.alexpado.mareu.entities.Meeting;
+import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.events.MeetingDeleteClicked;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewHolder> {
@@ -39,9 +43,33 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
         Meeting meeting = this.meetings.get(position);
 
-        // TODO: Better title (and add subtitle)
-        holder.getUiMeetingName().setText(meeting.getSubject());
-        holder.getUiMeetingActionDelete().setOnClickListener(v -> this.listener.onMeetingDeleted(meeting));
+        String title = String.format(
+                "%s - %s - %s",
+                meeting.getSubject(),
+                DateTimeFormatter.ofPattern("HH'h'mm").format(meeting.getTime()),
+                meeting.getLocation().getName()
+        );
+
+        holder.getUiMeetingName().setText(title);
+
+        if (meeting.getParticipants().isEmpty()) {
+            holder.getUiMeetingDescription().setText("No participants");
+        } else {
+
+            String description = meeting.getParticipants()
+                                        .stream()
+                                        .map(User::getMail)
+                                        .collect(Collectors.joining(", "));
+
+            holder.getUiMeetingDescription().setText(description);
+        }
+
+        int color = AppUtils.randomColor(meeting.getId());
+
+        holder.getUiMeetingThumbnail().setColorFilter(color);
+
+        holder.getUiMeetingActionDelete()
+              .setOnClickListener(v -> this.listener.onMeetingDeleted(meeting));
     }
 
     @Override
@@ -49,6 +77,5 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
         return this.meetings.size();
     }
-
 
 }

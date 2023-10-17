@@ -1,10 +1,13 @@
 package fr.alexpado.mareu.views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -12,6 +15,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,11 +25,18 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import fr.alexpado.mareu.AppUtils;
+import fr.alexpado.mareu.InjectionStore;
 import fr.alexpado.mareu.R;
 import fr.alexpado.mareu.data.BookingFragmentData;
 import fr.alexpado.mareu.entities.Meeting;
+import fr.alexpado.mareu.entities.User;
+import fr.alexpado.mareu.services.MeetingService;
+import fr.alexpado.mareu.services.UserService;
+import fr.alexpado.mareu.views.adapters.ParticipantRecyclerViewAdapter;
 
 public class BookingFragment extends Fragment {
 
@@ -34,14 +47,19 @@ public class BookingFragment extends Fragment {
     private TextInputEditText    meetingTime;
 
     private View               view;
+    private TextInputEditText  participantInput;
     private Button             validateButton;
     private Button             setTimeButton;
     private MaterialTimePicker timePicker;
+
+    private RecyclerView                   userRecyclerView;
+    private ParticipantRecyclerViewAdapter userAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        // If edit was supported, here we would pre-fill all fields.
         this.data = new BookingFragmentData();
     }
 
@@ -61,11 +79,13 @@ public class BookingFragment extends Fragment {
 
         this.view = view;
 
-        this.meetingSubject = (TextInputEditText) view.findViewById(R.id.add_meeting_subject);
-        this.meetingRoom    = (AutoCompleteTextView) view.findViewById(R.id.add_meeting_room);
-        this.meetingTime    = (TextInputEditText) view.findViewById(R.id.add_meeting_time);
-        this.setTimeButton  = (Button) view.findViewById(R.id.add_meeting_time_set);
-        this.validateButton = (Button) view.findViewById(R.id.add_meeting_validate);
+        this.meetingSubject   = (TextInputEditText) view.findViewById(R.id.add_meeting_subject);
+        this.meetingRoom      = (AutoCompleteTextView) view.findViewById(R.id.add_meeting_room);
+        this.meetingTime      = (TextInputEditText) view.findViewById(R.id.add_meeting_time);
+        this.setTimeButton    = (Button) view.findViewById(R.id.add_meeting_time_set);
+        this.validateButton   = (Button) view.findViewById(R.id.add_meeting_validate);
+        this.userRecyclerView = (RecyclerView) view.findViewById(R.id.participant_list_view);
+        this.participantInput = (TextInputEditText) view.findViewById(R.id.add_participant_mail);
 
         this.timePicker = this.createPicker();
 
@@ -83,22 +103,25 @@ public class BookingFragment extends Fragment {
 
         this.meetingRoom.setAdapter(roomAdapter);
 
-        this.setTimeButton.setOnClickListener(v -> {
-            this.timePicker.show(this.getParentFragmentManager(), "tag");
-        });
+        this.setTimeButton.setOnClickListener(this::handleTimeButtonClick);
+        this.validateButton.setOnClickListener(this::handleValidateButtonClick);
+        this.timePicker.addOnPositiveButtonClickListener(this::handleTimePickerConfirmation);
+        this.participantInput.setOnEditorActionListener(this::handleParticipantMailInputAction);
 
-        this.validateButton.setOnClickListener(v -> this.validate());
+        Context context = this.userRecyclerView.getContext();
 
-        this.timePicker.addOnPositiveButtonClickListener(v -> {
-            this.data.setTime(this.timePicker.getHour(), this.timePicker.getMinute());
+        this.userRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        this.userRecyclerView.addItemDecoration(new DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+        ));
 
-            // TODO: Use DateTimeFormatter
-            this.meetingTime.setText(String.format(
-                    "%s:%s",
-                    this.timePicker.getHour(),
-                    this.timePicker.getMinute()
-            ));
-        });
+        this.userAdapter = new ParticipantRecyclerViewAdapter(
+                this.userRecyclerView,
+                InjectionStore.userService(),
+                this.data
+        );
+        this.userRecyclerView.setAdapter(this.userAdapter);
     }
 
     /**
@@ -115,18 +138,60 @@ public class BookingFragment extends Fragment {
                 .build();
     }
 
-    private void validate() {
+    private void handleValidateButtonClick(View view) {
 
         this.data.setSubject(AppUtils.extractText(this.meetingSubject));
         this.data.setRoom(AppUtils.extractText(this.meetingRoom));
+        this.data.setParticipants(this.userAdapter.collectParticipants());
 
         if (this.data.isValid()) {
-            // TODO: Save using service then go back
-            Snackbar.make(this.view, "champaaaagne", Snackbar.LENGTH_LONG).show();
-        } else {
-            Snackbar.make(this.view, R.string.add_meeting_validation_failed, Snackbar.LENGTH_LONG).show();
-        }
 
+            MeetingService service = InjectionStore.meetingService();
+            service.book(this.data);
+            this.getParentFragmentManager().popBackStack();
+        } else {
+            Snackbar.make(this.view, R.string.add_meeting_validation_failed, Snackbar.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+
+    private void handleTimeButtonClick(View view) {
+
+        this.timePicker.show(this.getParentFragmentManager(), "tag");
+    }
+
+    private void handleTimePickerConfirmation(View view) {
+
+        this.data.setTime(this.timePicker.getHour(), this.timePicker.getMinute());
+
+        this.meetingTime.setText(
+                DateTimeFormatter
+                        .ofPattern("HH'h'mm")
+                        .format(this.data.getTime())
+        );
+    }
+
+    private boolean handleParticipantMailInputAction(View view, int actionId, KeyEvent event) {
+
+        boolean handled = false;
+
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+            UserService    userService  = InjectionStore.userService();
+            String         mail         = AppUtils.extractText(this.participantInput);
+            Optional<User> optionalUser = userService.findUser(mail);
+
+            if (optionalUser.isPresent()) {
+                this.userAdapter.setCheckedState(optionalUser.get(), true);
+            } else {
+                this.userAdapter.addUser(userService.createUser(mail), true);
+            }
+
+            this.participantInput.setText("");
+            handled = true;
+        }
+        return handled;
     }
 
 }

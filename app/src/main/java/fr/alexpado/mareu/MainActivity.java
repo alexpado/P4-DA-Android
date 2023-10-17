@@ -1,9 +1,10 @@
 package fr.alexpado.mareu;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import fr.alexpado.mareu.views.MeetingFragment;
 
@@ -23,6 +24,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         this.setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
     }
 
 }

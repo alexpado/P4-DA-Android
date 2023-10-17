@@ -3,6 +3,8 @@ package fr.alexpado.mareu.views;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,7 +36,15 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(true);
         this.service = InjectionStore.meetingService();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Nullable
