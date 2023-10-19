@@ -27,6 +27,9 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
     private MeetingService service;
     private RecyclerView   recyclerView;
 
+    /**
+     * Reset the {@link #recyclerView} content.
+     */
     private void initList() {
 
         this.recyclerView.setAdapter(new MeetingRecyclerViewAdapter(this, this.service.getAll()));

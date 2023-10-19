@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import fr.alexpado.mareu.R;
 
+/**
+ * Class representing a UI element within {@link MeetingRecyclerViewAdapter}. This contains
+ * references to UI components for easier access.
+ */
 public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView   uiMeetingThumbnail;
@@ -17,6 +21,12 @@ public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
     private TextView    uiMeetingDescription;
     private ImageButton uiMeetingActionDelete;
 
+    /**
+     * Create a new instance of {@link MeetingRecyclerViewHolder}.
+     *
+     * @param itemView
+     *         The {@link View} used to display an element on the UI.
+     */
     public MeetingRecyclerViewHolder(@NonNull View itemView) {
 
         super(itemView);

@@ -28,16 +28,38 @@ public class MeetingService {
         this.repository = repository;
     }
 
+    /**
+     * Add a new filter to change the displayable list of {@link Meeting}.
+     *
+     * @param filterName
+     *         The name of the filter, for future references.
+     * @param predicate
+     *         The filter to apply to the {@link Meeting} list.
+     */
     public void applyFilter(String filterName, Predicate<Meeting> predicate) {
 
         this.filters.put(filterName, predicate);
     }
 
+    /**
+     * Remove a filter added through {@link #applyFilter(String, Predicate)}.
+     *
+     * @param filterName
+     *         The name of the filter.
+     */
     public void removeFilter(String filterName) {
 
         this.filters.remove(filterName);
     }
 
+    /**
+     * Check if a filter name has been registered.
+     *
+     * @param filterName
+     *         The name of the filter.
+     *
+     * @return True if a filter of this name exists, false otherwise.
+     */
     public boolean hasFilter(String filterName) {
 
         return this.filters.containsKey(filterName);

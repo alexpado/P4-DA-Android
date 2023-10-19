@@ -19,8 +19,9 @@ import fr.alexpado.mareu.data.BookingFragmentData;
 import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.services.UserService;
 
+
 /**
- * Class handling everything related to {@link User} check state in a {@link RecyclerView}.
+ * Class responsible for handling the UI of a {@link User} list.
  */
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewHolder> {
 

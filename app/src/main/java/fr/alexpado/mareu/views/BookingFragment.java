@@ -40,6 +40,10 @@ import fr.alexpado.mareu.views.adapters.ParticipantRecyclerViewAdapter;
 
 public class BookingFragment extends Fragment {
 
+    /**
+     * This will wrap data contained across the fragment, converting every values to something more
+     * usable for {@link MeetingService}.
+     */
     private BookingFragmentData data;
 
     private TextInputEditText    meetingSubject;
@@ -94,6 +98,9 @@ public class BookingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Bind every UI components to their listeners and values.
+     */
     private void bindUi() {
 
         ArrayAdapter<String> roomAdapter = AppUtils.createRoomAdapter(
@@ -138,6 +145,12 @@ public class BookingFragment extends Fragment {
                 .build();
     }
 
+    /**
+     * Called when {@link #validateButton} is clicked by the user.
+     *
+     * @param view
+     *         The clicked button
+     */
     private void handleValidateButtonClick(View view) {
 
         this.data.setSubject(AppUtils.extractText(this.meetingSubject));
@@ -155,12 +168,23 @@ public class BookingFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Called when {@link #setTimeButton} is clicked by the user.
+     *
+     * @param view
+     *         The clicked button
+     */
     private void handleTimeButtonClick(View view) {
 
         this.timePicker.show(this.getParentFragmentManager(), "tag");
     }
 
+    /**
+     * Called when the user confirm its input in {@link #timePicker}.
+     *
+     * @param view
+     *         The modal
+     */
     private void handleTimePickerConfirmation(View view) {
 
         this.data.setTime(this.timePicker.getHour(), this.timePicker.getMinute());
@@ -172,6 +196,18 @@ public class BookingFragment extends Fragment {
         );
     }
 
+    /**
+     * Called when an IME action happens on {@link #participantInput}.
+     *
+     * @param view
+     *         The view from which the IME action is being handled
+     * @param actionId
+     *         The IME action ID
+     * @param event
+     *         The {@link KeyEvent} representing this IME action
+     *
+     * @return True if it has been handled here, false otherwise.
+     */
     private boolean handleParticipantMailInputAction(View view, int actionId, KeyEvent event) {
 
         boolean handled = false;

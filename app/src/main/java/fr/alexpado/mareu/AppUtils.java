@@ -13,10 +13,23 @@ import java.util.stream.Collectors;
 import fr.alexpado.mareu.entities.Room;
 import fr.alexpado.mareu.services.RoomService;
 
+/**
+ * Class containing utility methods.
+ */
 public final class AppUtils {
 
     private AppUtils() {}
 
+    /**
+     * Create an {@link ArrayAdapter} from all {@link Room} using {@link RoomService#getRooms()}.
+     *
+     * @param context
+     *         The current view context.
+     * @param layout
+     *         The layout resource id to use to inflate the target of the new {@link ArrayAdapter}.
+     *
+     * @return An {@link ArrayAdapter} of {@link Room} names.
+     */
     public static ArrayAdapter<String> createRoomAdapter(Context context, int layout) {
 
         RoomService service = InjectionStore.roomService();
@@ -29,6 +42,14 @@ public final class AppUtils {
         return new ArrayAdapter<>(context, layout, items);
     }
 
+    /**
+     * Retrieve the {@link TextView} content as {@link String} (null-safe).
+     *
+     * @param text
+     *         The {@link TextView} from which the text should be extracted.
+     *
+     * @return The {@link String} contained in the {@link TextView}
+     */
     public static String extractText(TextView text) {
 
         return Optional.ofNullable(text.getText()).orElse("").toString();

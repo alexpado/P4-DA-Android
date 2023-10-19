@@ -9,11 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import fr.alexpado.mareu.R;
 
+/**
+ * Class representing a UI element within {@link ParticipantRecyclerViewAdapter}. This contains
+ * references to UI components for easier access.
+ */
 public class ParticipantRecyclerViewHolder extends RecyclerView.ViewHolder {
 
     private TextView uiMail;
     private CheckBox uiCheck;
 
+    /**
+     * Create a new instance of {@link ParticipantRecyclerViewHolder}.
+     *
+     * @param itemView
+     *         The {@link View} used to display an element on the UI.
+     */
     public ParticipantRecyclerViewHolder(@NonNull View itemView) {
 
         super(itemView);

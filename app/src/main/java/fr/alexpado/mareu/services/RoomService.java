@@ -6,6 +6,9 @@ import java.util.Optional;
 import fr.alexpado.mareu.entities.Room;
 import fr.alexpado.mareu.interfaces.repositories.RoomRepository;
 
+/**
+ * Service allowing an easy interaction with {@link RoomRepository}.
+ */
 public class RoomService {
 
     private final RoomRepository repository;

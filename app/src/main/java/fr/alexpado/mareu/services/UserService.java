@@ -6,6 +6,10 @@ import java.util.Optional;
 import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.interfaces.repositories.UserRepository;
 
+
+/**
+ * Service allowing an easy interaction with {@link UserRepository}.
+ */
 public class UserService {
 
     private final UserRepository repository;

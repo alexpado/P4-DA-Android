@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fr.alexpado.mareu.InjectionStore;
+import fr.alexpado.mareu.entities.Meeting;
 import fr.alexpado.mareu.entities.Room;
 import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.views.BookingFragment;
 
 /**
- * Class used to store data from {@link BookingFragment}'s interface.
+ * Class used to store data from {@link BookingFragment}'s interface. This will be used to create a
+ * brand new {@link Meeting} instance.
  */
 public class BookingFragmentData {
 

@@ -17,11 +17,22 @@ import fr.alexpado.mareu.entities.Meeting;
 import fr.alexpado.mareu.entities.User;
 import fr.alexpado.mareu.events.MeetingDeleteClicked;
 
+/**
+ * Class responsible for handling the UI of a {@link Meeting} list.
+ */
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewHolder> {
 
     private final MeetingDeleteClicked listener;
     private final List<Meeting>        meetings;
 
+    /**
+     * Create a new instance of {@link MeetingRecyclerViewAdapter}.
+     *
+     * @param listener
+     *         The {@link MeetingDeleteClicked} to use when a delete button is clicked.
+     * @param meetings
+     *         The {@link Meeting} list to display on the UI.
+     */
     public MeetingRecyclerViewAdapter(MeetingDeleteClicked listener, List<Meeting> meetings) {
 
         this.listener = listener;
