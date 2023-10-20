@@ -1,10 +1,10 @@
 package fr.alexpado.mareu;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import fr.alexpado.mareu.views.MeetingFragment;
 
@@ -24,14 +24,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         this.setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
+        MaterialToolbar toolbar = (MaterialToolbar) this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+        if (this.getSupportActionBar() != null) {
+            this.getSupportActionBar().setTitle("Main Page");
+        }
     }
 
 }

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -14,6 +16,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,6 +68,22 @@ public class BookingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // If edit was supported, here we would pre-fill all fields.
         this.data = new BookingFragmentData();
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        ActionBar bar = AppUtils.getBarFrom(this);
+        if (bar != null) {
+            bar.setSubtitle(R.string.fragment_booking);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu, menu);
     }
 
     @Nullable

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +42,20 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
         this.service = InjectionStore.meetingService();
+    }
+
+    /**
+     * Called when the fragment is visible to the user and actively running. This is generally tied
+     * to {@link Activity#onResume() Activity.onResume} of the containing Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        ActionBar bar = AppUtils.getBarFrom(this);
+        if (bar != null) {
+            bar.setSubtitle(R.string.fragment_meetings);
+        }
     }
 
     @Override
