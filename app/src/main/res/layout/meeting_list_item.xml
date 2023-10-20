@@ -5,7 +5,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/text_margin">
+        android:paddingTop="@dimen/text_margin"
+        android:paddingBottom="@dimen/text_margin">
 
 
     <ImageView
@@ -47,14 +48,12 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical|end">
 
-        <ImageButton
+        <Button
                 android:id="@+id/meeting_list_item_action_delete"
+                style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/baseline_delete_24"
-                android:backgroundTint="@color/design_default_color_error"
-                android:layout_marginBottom="@dimen/text_margin"
-                android:layout_marginTop="@dimen/text_margin" />
+                app:icon="@drawable/baseline_delete_24" />
     </LinearLayout>
 
 </LinearLayout>
