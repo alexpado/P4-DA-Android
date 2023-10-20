@@ -16,10 +16,10 @@ import fr.alexpado.mareu.R;
  */
 public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView uiMeetingThumbnail;
-    private TextView  uiMeetingName;
-    private TextView  uiMeetingDescription;
-    private Button    uiMeetingActionDelete;
+    private final ImageView uiMeetingThumbnail;
+    private final TextView  uiMeetingName;
+    private final TextView  uiMeetingDescription;
+    private final Button    uiMeetingActionDelete;
 
     /**
      * Create a new instance of {@link MeetingRecyclerViewHolder}.
