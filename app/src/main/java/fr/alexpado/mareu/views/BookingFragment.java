@@ -5,22 +5,21 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -32,8 +31,10 @@ import fr.alexpado.mareu.AppUtils;
 import fr.alexpado.mareu.InjectionStore;
 import fr.alexpado.mareu.R;
 import fr.alexpado.mareu.data.BookingFragmentData;
+import fr.alexpado.mareu.databinding.BookingFragmentBinding;
 import fr.alexpado.mareu.entities.Meeting;
 import fr.alexpado.mareu.entities.User;
+import fr.alexpado.mareu.interfaces.InputChanger;
 import fr.alexpado.mareu.services.MeetingService;
 import fr.alexpado.mareu.services.UserService;
 import fr.alexpado.mareu.views.adapters.ParticipantRecyclerViewAdapter;
@@ -44,19 +45,9 @@ public class BookingFragment extends Fragment {
      * This will wrap data contained across the fragment, converting every values to something more
      * usable for {@link MeetingService}.
      */
-    private BookingFragmentData data;
-
-    private TextInputEditText    meetingSubject;
-    private AutoCompleteTextView meetingRoom;
-    private TextInputEditText    meetingTime;
-
-    private View               view;
-    private TextInputEditText  participantInput;
-    private Button             validateButton;
-    private Button             setTimeButton;
-    private MaterialTimePicker timePicker;
-
-    private RecyclerView                   userRecyclerView;
+    private BookingFragmentData            data;
+    private BookingFragmentBinding         binding;
+    private MaterialTimePicker             timePicker;
     private ParticipantRecyclerViewAdapter userAdapter;
 
     @Override
@@ -67,68 +58,68 @@ public class BookingFragment extends Fragment {
         this.data = new BookingFragmentData();
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        ActionBar bar = AppUtils.getBarFrom(this);
+        if (bar != null) {
+            bar.setSubtitle(R.string.fragment_booking);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu, menu);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(
-                R.layout.booking_fragment,
-                container,
-                false
-        );
+        this.binding = BookingFragmentBinding.inflate(inflater, container, false);
+        return this.binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        this.view = view;
-
-        this.meetingSubject   = (TextInputEditText) view.findViewById(R.id.add_meeting_subject);
-        this.meetingRoom      = (AutoCompleteTextView) view.findViewById(R.id.add_meeting_room);
-        this.meetingTime      = (TextInputEditText) view.findViewById(R.id.add_meeting_time);
-        this.setTimeButton    = (Button) view.findViewById(R.id.add_meeting_time_set);
-        this.validateButton   = (Button) view.findViewById(R.id.add_meeting_validate);
-        this.userRecyclerView = (RecyclerView) view.findViewById(R.id.participant_list_view);
-        this.participantInput = (TextInputEditText) view.findViewById(R.id.add_participant_mail);
-
-        this.timePicker = this.createPicker();
-
-        this.bindUi();
-
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    /**
-     * Bind every UI components to their listeners and values.
-     */
-    private void bindUi() {
 
         ArrayAdapter<String> roomAdapter = AppUtils.createRoomAdapter(
                 this.requireContext(),
                 R.layout.material_item_view
         );
 
-        this.meetingRoom.setAdapter(roomAdapter);
-
-        this.setTimeButton.setOnClickListener(this::handleTimeButtonClick);
-        this.validateButton.setOnClickListener(this::handleValidateButtonClick);
-        this.timePicker.addOnPositiveButtonClickListener(this::handleTimePickerConfirmation);
-        this.participantInput.setOnEditorActionListener(this::handleParticipantMailInputAction);
-
-        Context context = this.userRecyclerView.getContext();
-
-        this.userRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        this.userRecyclerView.addItemDecoration(new DividerItemDecoration(
-                context,
-                DividerItemDecoration.VERTICAL
-        ));
-
         this.userAdapter = new ParticipantRecyclerViewAdapter(
-                this.userRecyclerView,
+                this.binding.participantListView,
                 InjectionStore.userService(),
                 this.data
         );
-        this.userRecyclerView.setAdapter(this.userAdapter);
+
+        this.timePicker = this.createPicker();
+
+        this.binding.addMeetingSubject.addTextChangedListener((InputChanger) s -> this.data.setSubject(
+                s));
+        this.binding.addMeetingRoom.addTextChangedListener((InputChanger) s -> this.data.setRoom(s));
+
+        this.binding.addMeetingRoom.setAdapter(roomAdapter);
+        this.binding.addMeetingTimeSet.setOnClickListener(this::handleTimeButtonClick);
+        this.binding.addMeetingValidate.setOnClickListener(this::handleValidateButtonClick);
+        this.binding.addParticipantMail.setOnEditorActionListener(this::handleParticipantMailInputAction);
+
+        this.timePicker.addOnPositiveButtonClickListener(this::handleTimePickerConfirmation);
+
+        Context listViewContext = this.binding.participantListView.getContext();
+
+        this.binding.participantListView.setLayoutManager(new LinearLayoutManager(listViewContext));
+        this.binding.participantListView.addItemDecoration(new DividerItemDecoration(
+                listViewContext,
+                DividerItemDecoration.VERTICAL
+        ));
+
+        this.binding.participantListView.setAdapter(this.userAdapter);
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
     /**
@@ -153,8 +144,6 @@ public class BookingFragment extends Fragment {
      */
     private void handleValidateButtonClick(View view) {
 
-        this.data.setSubject(AppUtils.extractText(this.meetingSubject));
-        this.data.setRoom(AppUtils.extractText(this.meetingRoom));
         this.data.setParticipants(this.userAdapter.collectParticipants());
 
         if (this.data.isValid()) {
@@ -163,7 +152,11 @@ public class BookingFragment extends Fragment {
             service.book(this.data);
             this.getParentFragmentManager().popBackStack();
         } else {
-            Snackbar.make(this.view, R.string.add_meeting_validation_failed, Snackbar.LENGTH_LONG)
+            Snackbar.make(
+                            this.binding.getRoot(),
+                            R.string.add_meeting_validation_failed,
+                            Snackbar.LENGTH_LONG
+                    )
                     .show();
         }
     }
@@ -189,15 +182,13 @@ public class BookingFragment extends Fragment {
 
         this.data.setTime(this.timePicker.getHour(), this.timePicker.getMinute());
 
-        this.meetingTime.setText(
-                DateTimeFormatter
-                        .ofPattern("HH'h'mm")
-                        .format(this.data.getTime())
-        );
+        this.binding.addMeetingTime.setText(DateTimeFormatter
+                                                    .ofPattern("HH'h'mm")
+                                                    .format(this.data.getTime()));
     }
 
     /**
-     * Called when an IME action happens on {@link #participantInput}.
+     * Called when an IME action happens.
      *
      * @param view
      *         The view from which the IME action is being handled
@@ -215,7 +206,7 @@ public class BookingFragment extends Fragment {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
 
             UserService    userService  = InjectionStore.userService();
-            String         mail         = AppUtils.extractText(this.participantInput);
+            String         mail         = AppUtils.extractText(this.binding.addParticipantMail);
             Optional<User> optionalUser = userService.findUser(mail);
 
             if (optionalUser.isPresent()) {
@@ -224,7 +215,7 @@ public class BookingFragment extends Fragment {
                 this.userAdapter.addUser(userService.createUser(mail), true);
             }
 
-            this.participantInput.setText("");
+            this.binding.addParticipantMail.setText("");
             handled = true;
         }
         return handled;

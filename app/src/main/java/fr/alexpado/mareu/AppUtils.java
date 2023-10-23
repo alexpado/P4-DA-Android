@@ -5,6 +5,10 @@ import android.graphics.Color;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -53,6 +57,15 @@ public final class AppUtils {
     public static String extractText(TextView text) {
 
         return Optional.ofNullable(text.getText()).orElse("").toString();
+    }
+
+    public static ActionBar getBarFrom(Fragment fragment) {
+
+        AppCompatActivity activity = (AppCompatActivity) fragment.getActivity();
+        if (activity == null) {
+            return null;
+        }
+        return activity.getSupportActionBar();
     }
 
     /**

@@ -15,8 +15,8 @@ import fr.alexpado.mareu.R;
  */
 public class ParticipantRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView uiMail;
-    private CheckBox uiCheck;
+    private final TextView uiMail;
+    private final CheckBox uiCheck;
 
     /**
      * Create a new instance of {@link ParticipantRecyclerViewHolder}.

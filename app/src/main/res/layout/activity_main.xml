@@ -12,16 +12,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_weight="1"
-                android:background="?attr/colorPrimary"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                style="@style/Widget.Material3.Toolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="@string/app_name">
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.fragment.app.FragmentContainerView

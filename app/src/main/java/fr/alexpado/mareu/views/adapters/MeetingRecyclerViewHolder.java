@@ -1,7 +1,7 @@
 package fr.alexpado.mareu.views.adapters;
 
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,10 +16,10 @@ import fr.alexpado.mareu.R;
  */
 public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView   uiMeetingThumbnail;
-    private TextView    uiMeetingName;
-    private TextView    uiMeetingDescription;
-    private ImageButton uiMeetingActionDelete;
+    private final ImageView uiMeetingThumbnail;
+    private final TextView  uiMeetingName;
+    private final TextView  uiMeetingDescription;
+    private final Button    uiMeetingActionDelete;
 
     /**
      * Create a new instance of {@link MeetingRecyclerViewHolder}.
@@ -52,7 +52,7 @@ public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
         return this.uiMeetingDescription;
     }
 
-    public ImageButton getUiMeetingActionDelete() {
+    public Button getUiMeetingActionDelete() {
 
         return this.uiMeetingActionDelete;
     }

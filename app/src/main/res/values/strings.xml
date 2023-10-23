@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Maréu</string>
+    <string name="fragment_meetings">Meetings</string>
+    <string name="fragment_booking">Book a meeting</string>
 
     <string name="fab_add_meeting">Book a meeting</string>
 

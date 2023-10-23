@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import fr.alexpado.mareu.AppUtils;
 import fr.alexpado.mareu.InjectionStore;
 import fr.alexpado.mareu.R;
+import fr.alexpado.mareu.databinding.MeetingFragmentBinding;
 import fr.alexpado.mareu.entities.Meeting;
 import fr.alexpado.mareu.events.MeetingDeleteClicked;
 import fr.alexpado.mareu.services.MeetingService;
@@ -24,15 +26,18 @@ import fr.alexpado.mareu.views.adapters.MeetingRecyclerViewAdapter;
 
 public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
 
-    private MeetingService service;
-    private RecyclerView   recyclerView;
+    private MeetingFragmentBinding binding;
+    private MeetingService         service;
 
     /**
      * Reset the {@link #recyclerView} content.
      */
     private void initList() {
 
-        this.recyclerView.setAdapter(new MeetingRecyclerViewAdapter(this, this.service.getAll()));
+        this.binding.meetingListView.setAdapter(new MeetingRecyclerViewAdapter(
+                this,
+                this.service.getAll()
+        ));
     }
 
     @Override
@@ -41,6 +46,20 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
         this.service = InjectionStore.meetingService();
+    }
+
+    /**
+     * Called when the fragment is visible to the user and actively running. This is generally tied
+     * to {@link Activity#onResume() Activity.onResume} of the containing Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        ActionBar bar = AppUtils.getBarFrom(this);
+        if (bar != null) {
+            bar.setSubtitle(R.string.fragment_meetings);
+        }
     }
 
     @Override
@@ -54,22 +73,18 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(
-                R.layout.meeting_fragment,
-                container,
-                false
-        );
+        this.binding = MeetingFragmentBinding.inflate(inflater, container, false);
+        return this.binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        this.recyclerView = view.findViewById(R.id.meeting_list_view);
 
-        Context context = this.recyclerView.getContext();
+        Context context = this.binding.meetingListView.getContext();
 
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        this.recyclerView.addItemDecoration(new DividerItemDecoration(
+        this.binding.meetingListView.setLayoutManager(new LinearLayoutManager(context));
+        this.binding.meetingListView.addItemDecoration(new DividerItemDecoration(
                 context,
                 DividerItemDecoration.VERTICAL
         ));
