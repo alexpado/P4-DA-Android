@@ -14,6 +14,7 @@ public class FakeRoomRepository extends FakeRepository<Room> implements RoomRepo
 
         super(new ArrayList<>());
 
+        // Fake rooms
         this.save(new Room("Mario"));
         this.save(new Room("Luigi"));
         this.save(new Room("Yoshi"));

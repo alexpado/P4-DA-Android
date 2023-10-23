@@ -15,6 +15,7 @@ public class FakeUserRepository extends FakeRepository<User> implements UserRepo
 
         super(new ArrayList<>());
 
+        // Fake users
         this.save(new User("j.dassin@lamzone.fr"));
         this.save(new User("s.gainsbourg@lamzone.fr"));
         this.save(new User("r.gotainer@lamzone.fr"));

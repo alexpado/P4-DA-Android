@@ -137,7 +137,7 @@ public class BookingFragment extends Fragment {
     }
 
     /**
-     * Called when {@link #validateButton} is clicked by the user.
+     * Called when the user click the confirmation button
      *
      * @param view
      *         The clicked button
@@ -162,7 +162,7 @@ public class BookingFragment extends Fragment {
     }
 
     /**
-     * Called when {@link #setTimeButton} is clicked by the user.
+     * Called when the user request to set the time.
      *
      * @param view
      *         The clicked button
@@ -173,7 +173,7 @@ public class BookingFragment extends Fragment {
     }
 
     /**
-     * Called when the user confirm its input in {@link #timePicker}.
+     * Called when the user confirm his time input.
      *
      * @param view
      *         The modal

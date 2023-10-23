@@ -88,7 +88,7 @@ public class MeetingService {
     }
 
     /**
-     * reate a new {@link Meeting} using the provided data.
+     * Create a new {@link Meeting} using the provided data.
      *
      * @param data
      *         A {@link BookingFragmentData} containing user inputs for the {@link Meeting}
