@@ -2,6 +2,7 @@
     <string name="app_name">Maréu</string>
     <string name="fragment_meetings">Meetings</string>
     <string name="fragment_booking">Book a meeting</string>
+    <string name="fragment_filtering">Filter meetings</string>
 
     <string name="fab_add_meeting">Book a meeting</string>
 
@@ -13,6 +14,12 @@
     <string name="add_meeting_time_set">Set Time</string>
     <string name="add_meeting_validate">Book Meeting</string>
     <string name="add_meeting_validation_failed">Please check any fields for errors.</string>
+
+    <string name="filter_meeting_room">Meeting Room</string>
+    <string name="filter_meeting_time">Meeting Time</string>
+
+    <string name="filter_meeting_room_remove_accessibility">Delete Meeting Room Filter</string>
+    <string name="filter_meeting_time_remove_accessibility">Delete Meeting Time Filter</string>
 
     <string name="participant_mail">Participant Mail</string>
 </resources>

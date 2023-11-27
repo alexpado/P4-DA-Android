@@ -20,8 +20,14 @@ import fr.alexpado.mareu.interfaces.repositories.MeetingRepository;
  */
 public class MeetingService {
 
+    public static final String FILTER_ROOM_NAME = Room.class.getName();
+    public static final String FILTER_TIME_NAME = LocalTime.class.getName();
+
     private final MeetingRepository               repository;
     private final Map<String, Predicate<Meeting>> filters = new HashMap<>();
+
+    private Room filterRoom;
+    private LocalTime filterTime;
 
     public MeetingService(MeetingRepository repository) {
 
@@ -131,4 +137,39 @@ public class MeetingService {
         return stream.collect(Collectors.toList());
     }
 
+    public void setRoomFilter(Room room) {
+
+        this.filterRoom = room;
+
+        if (room == null){
+            if (this.hasFilter(FILTER_ROOM_NAME)) {
+                this.removeFilter(FILTER_ROOM_NAME);
+            }
+            return;
+        }
+
+        this.applyFilter(FILTER_ROOM_NAME, meeting -> meeting.getLocation().equals(room));
+    }
+
+    public void setTimeFilter(LocalTime time) {
+
+        this.filterTime = time;
+
+        if (time == null){
+            if (this.hasFilter(FILTER_TIME_NAME)) {
+                this.removeFilter(FILTER_TIME_NAME);
+            }
+            return;
+        }
+
+        this.applyFilter(FILTER_TIME_NAME, meeting -> meeting.getTime().equals(time));
+    }
+
+    public LocalTime getFilterTime() {
+        return filterTime;
+    }
+
+    public Room getFilterRoom() {
+        return filterRoom;
+    }
 }

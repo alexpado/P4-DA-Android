@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -101,6 +102,18 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
 
         this.service.remove(meeting);
         this.initList();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_filter_button) {
+            this.getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new FilterFragment())
+                    .addToBackStack("filter")
+                    .commit();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
