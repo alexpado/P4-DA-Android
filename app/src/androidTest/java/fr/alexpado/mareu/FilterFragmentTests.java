@@ -44,6 +44,8 @@ import fr.alexpado.mareu.services.UserService;
 @RunWith(AndroidJUnit4.class)
 public class FilterFragmentTests {
 
+    private static final int THREAD_SLEEP_TIMEOUT = 500;
+
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityRule = new ActivityScenarioRule<>(MainActivity.class);
 
@@ -82,7 +84,9 @@ public class FilterFragmentTests {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws InterruptedException {
+
+        Thread.sleep(THREAD_SLEEP_TIMEOUT);
 
         RoomService roomService = InjectionStore.roomService();
         MeetingService meetingService = InjectionStore.meetingService();
@@ -114,7 +118,7 @@ public class FilterFragmentTests {
                 .inRoot(isPlatformPopup()) // https://stackoverflow.com/a/45368345/12073017
                 .perform(click());
 
-        Thread.sleep(200);
+        Thread.sleep(THREAD_SLEEP_TIMEOUT);
 
         Assert.assertTrue(InjectionStore.meetingService().hasFilter(FILTER_ROOM_NAME));
 
@@ -145,7 +149,7 @@ public class FilterFragmentTests {
     }
 
     @Test
-    public void roomFilter_removeFilter() {
+    public void roomFilter_removeFilter() throws InterruptedException {
         // Show the dropdown displaying all rooms
         onView(withId(R.id.filter_meeting_room)).perform(showDropdown());
 
@@ -153,6 +157,8 @@ public class FilterFragmentTests {
         onView(withText(this.roomA.getName()))
                 .inRoot(isPlatformPopup()) // https://stackoverflow.com/a/45368345/12073017
                 .perform(click());
+
+        Thread.sleep(THREAD_SLEEP_TIMEOUT);
 
         Assert.assertTrue(InjectionStore.meetingService().hasFilter(FILTER_ROOM_NAME));
 
