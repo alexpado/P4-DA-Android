@@ -6,21 +6,17 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static fr.alexpado.mareu.services.MeetingService.FILTER_ROOM_NAME;
 import static fr.alexpado.mareu.utils.TestUtils.expectedItemCount;
-import static fr.alexpado.mareu.utils.TestUtils.pause;
 import static fr.alexpado.mareu.utils.TestUtils.showDropdown;
 
-import android.widget.TimePicker;
-
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.contrib.PickerActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,16 +43,14 @@ public class FilterFragmentTests {
     private LocalTime timeB;
 
     @Before
-    public void setup() throws InterruptedException {
-
-        pause();
+    public void setup() {
 
         RoomService    roomService    = InjectionStore.roomService();
         MeetingService meetingService = InjectionStore.meetingService();
         UserService    userService    = InjectionStore.userService();
 
-        this.timeA = LocalTime.of(0, 0);
-        this.timeB = LocalTime.of(1, 0);
+        this.timeA = LocalTime.of(1, 0);
+        this.timeB = LocalTime.of(2, 0);
         this.roomA = roomService.getRooms().get(0);
         this.roomB = roomService.getRooms().get(1);
 
@@ -72,7 +66,7 @@ public class FilterFragmentTests {
         onView(withId(R.id.fragment_filter)).check(matches(isDisplayed()));
     }
 
-    private void roomFilter(Room room) throws InterruptedException {
+    private void roomFilter(Room room) {
         // Show the dropdown displaying all rooms
         onView(withId(R.id.filter_meeting_room)).perform(showDropdown());
 
@@ -80,8 +74,6 @@ public class FilterFragmentTests {
         onView(withText(room.getName()))
                 .inRoot(isPlatformPopup()) // https://stackoverflow.com/a/45368345/12073017
                 .perform(click());
-
-        pause();
 
         Assert.assertTrue(InjectionStore.meetingService().hasFilter(FILTER_ROOM_NAME));
 
@@ -95,31 +87,43 @@ public class FilterFragmentTests {
         onView(withId(R.id.meeting_list_view)).check(expectedItemCount(2));
     }
 
-    private void timeFilter(LocalTime time) throws InterruptedException {
+    private void timeFilter(LocalTime time) {
 
         onView(withId(R.id.filter_meeting_time)).perform(click());
 
-        onView(ViewMatchers.withClassName(Matchers.equalTo(TimePicker.class.getName())))
-                .inRoot(isPlatformPopup())
-                .perform(PickerActions.setTime(12, 0));
+        onView(withId(com.google.android.material.R.id.material_hour_tv))
+                .perform(click());
 
-        pause();
+        onView(allOf(
+                withText(String.valueOf(time.getHour())),
+                withParent(withId(com.google.android.material.R.id.material_clock_face))
+        )).perform(click());
+
+        onView(withId(com.google.android.material.R.id.material_minute_tv))
+                .perform(click());
+
+        onView(allOf(
+                withText(String.format("%02d", time.getMinute())),
+                withParent(withId(com.google.android.material.R.id.material_clock_face))
+        )).perform(click());
+
+        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
     }
 
     @Test
-    public void roomFilter_filterOnRoomA() throws InterruptedException {
+    public void roomFilter_filterOnRoomA() {
 
         this.roomFilter(this.roomA);
     }
 
     @Test
-    public void roomFilter_filterOnRoomB() throws InterruptedException {
+    public void roomFilter_filterOnRoomB() {
 
         this.roomFilter(this.roomB);
     }
 
     @Test
-    public void roomFilter_removeFilter() throws InterruptedException {
+    public void roomFilter_removeFilter() {
         // Show the dropdown displaying all rooms
         onView(withId(R.id.filter_meeting_room)).perform(showDropdown());
 
@@ -127,8 +131,6 @@ public class FilterFragmentTests {
         onView(withText(this.roomA.getName()))
                 .inRoot(isPlatformPopup()) // https://stackoverflow.com/a/45368345/12073017
                 .perform(click());
-
-        pause();
 
         Assert.assertTrue(InjectionStore.meetingService().hasFilter(FILTER_ROOM_NAME));
 
@@ -138,13 +140,13 @@ public class FilterFragmentTests {
     }
 
     @Test
-    public void timeFilter_filterOnTimeA() throws InterruptedException {
+    public void timeFilter_filterOnTimeA() {
 
         this.timeFilter(this.timeA);
     }
 
     @Test
-    public void timeFilter_filterOnTimeB() throws InterruptedException {
+    public void timeFilter_filterOnTimeB() {
 
         this.timeFilter(this.timeB);
     }

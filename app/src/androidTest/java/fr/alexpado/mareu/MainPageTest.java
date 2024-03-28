@@ -3,7 +3,6 @@ package fr.alexpado.mareu;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static fr.alexpado.mareu.utils.TestUtils.expectedItemCount;
@@ -61,7 +60,9 @@ public class MainPageTest {
         meetingService.book(room, time, "Test", userService.getUsers());
 
         onView(withId(R.id.meeting_list_view)).check(expectedItemCount(1));
-        onView(withId(R.id.meeting_list_view)).perform(actionOnItemAtPosition(0, click()));
+        // Find a way to refresh the display, because for some reason, items aren't displayed but
+        // the previous line doesn't fail.
+        onView(withId(R.id.meeting_list_item_action_delete)).perform(click());
         onView(withId(R.id.meeting_list_view)).check(expectedItemCount(0));
     }
 
