@@ -3,6 +3,7 @@ package fr.alexpado.mareu.views;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,6 +106,9 @@ public class BookingFragment extends Fragment {
         this.binding.addMeetingRoom.setAdapter(roomAdapter);
         this.binding.addMeetingTimeSet.setOnClickListener(this::handleTimeButtonClick);
         this.binding.addMeetingValidate.setOnClickListener(this::handleValidateButtonClick);
+
+        this.binding.addParticipantMail.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        this.binding.addParticipantMail.setImeActionLabel("Add", EditorInfo.IME_ACTION_DONE);
         this.binding.addParticipantMail.setOnEditorActionListener(this::handleParticipantMailInputAction);
 
         this.timePicker.addOnPositiveButtonClickListener(this::handleTimePickerConfirmation);
@@ -202,6 +206,7 @@ public class BookingFragment extends Fragment {
     private boolean handleParticipantMailInputAction(View view, int actionId, KeyEvent event) {
 
         boolean handled = false;
+        Log.d("KEY", String.format("Pressed %s (filtering %s)", actionId, EditorInfo.IME_ACTION_DONE));
 
         if (actionId == EditorInfo.IME_ACTION_DONE) {
 
