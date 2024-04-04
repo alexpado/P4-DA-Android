@@ -26,7 +26,7 @@ public class MeetingService {
     private final MeetingRepository               repository;
     private final Map<String, Predicate<Meeting>> filters = new HashMap<>();
 
-    private Room filterRoom;
+    private Room      filterRoom;
     private LocalTime filterTime;
 
     public MeetingService(MeetingRepository repository) {
@@ -141,7 +141,7 @@ public class MeetingService {
 
         this.filterRoom = room;
 
-        if (room == null){
+        if (room == null) {
             if (this.hasFilter(FILTER_ROOM_NAME)) {
                 this.removeFilter(FILTER_ROOM_NAME);
             }
@@ -155,7 +155,7 @@ public class MeetingService {
 
         this.filterTime = time;
 
-        if (time == null){
+        if (time == null) {
             if (this.hasFilter(FILTER_TIME_NAME)) {
                 this.removeFilter(FILTER_TIME_NAME);
             }
@@ -166,10 +166,13 @@ public class MeetingService {
     }
 
     public LocalTime getFilterTime() {
+
         return filterTime;
     }
 
     public Room getFilterRoom() {
+
         return filterRoom;
     }
+
 }

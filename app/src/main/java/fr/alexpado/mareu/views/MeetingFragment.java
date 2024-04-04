@@ -31,7 +31,7 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
     private MeetingService         service;
 
     /**
-     * Reset the {@link #recyclerView} content.
+     * Reset the RecyclerView content.
      */
     private void initList() {
 
@@ -106,12 +106,13 @@ public class MeetingFragment extends Fragment implements MeetingDeleteClicked {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == R.id.menu_filter_button) {
             this.getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new FilterFragment())
-                    .addToBackStack("filter")
-                    .commit();
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FilterFragment())
+                .addToBackStack("filter")
+                .commit();
         }
         return super.onOptionsItemSelected(item);
     }
