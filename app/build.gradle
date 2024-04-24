@@ -56,3 +56,34 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestUtil 'androidx.test:orchestrator:1.4.2'
 }
+
+tasks.register('generateApiDoc') {
+    group "reporting"
+    description "Generates Javadoc."
+}
+
+android.applicationVariants.configureEach { variant ->
+    // Only consider release
+    if (variant.buildType.name == "release") {
+        def task = project.tasks.create("generate${variant.name.capitalize()}Javadoc", Javadoc) {
+            group "ApiDoc"
+            description "Generates Javadoc for $variant.name."
+
+            // Source files from the variant
+            source = variant.getJavaCompileProvider().get().source
+            // Classpath from the variant + android.jar
+            classpath = variant.getJavaCompileProvider().get().classpath + files(android.getBootClasspath()) + files("$buildDir/intermediates/classes/release")
+
+            options.windowTitle = "My Library"
+            options.memberLevel = JavadocMemberLevel.PROTECTED
+            options.linkSource false
+            options.author = true
+
+            failOnError false
+        }
+
+        task.dependsOn getAssembleProvider().get()
+
+        generateApiDoc.dependsOn task
+    }
+}
