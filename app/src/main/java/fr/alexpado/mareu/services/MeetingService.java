@@ -1,5 +1,7 @@
 package fr.alexpado.mareu.services;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashMap;
@@ -137,7 +139,18 @@ public class MeetingService {
         return stream.collect(Collectors.toList());
     }
 
-    public void setRoomFilter(Room room) {
+    /**
+     * Define the {@link Room} filter for this {@link MeetingService}. This will add an active
+     * filter to this {@link MeetingService} which will change the output of {@link #getAll()}.
+     * <p>
+     * If the provided {@link Room} is {@code null}, then the aforementioned filter will be removed
+     * instead.
+     *
+     * @param room
+     *         The {@link Room} to create a filter from, or {@code null} to remove an already set
+     *         filter.
+     */
+    public void setRoomFilter(@Nullable Room room) {
 
         this.filterRoom = room;
 
@@ -151,6 +164,17 @@ public class MeetingService {
         this.applyFilter(FILTER_ROOM_NAME, meeting -> meeting.getLocation().equals(room));
     }
 
+    /**
+     * Define the {@link LocalTime} filter for this {@link MeetingService}. This will add an active
+     * filter to this {@link MeetingService} which will change the output of {@link #getAll()}.
+     * <p>
+     * If the provided {@link LocalTime} is {@code null}, then the aforementioned filter will be
+     * removed instead.
+     *
+     * @param time
+     *         The {@link LocalTime} to create a filter from, or {@code null} to remove an already
+     *         set filter.
+     */
     public void setTimeFilter(LocalTime time) {
 
         this.filterTime = time;
@@ -165,12 +189,24 @@ public class MeetingService {
         this.applyFilter(FILTER_TIME_NAME, meeting -> meeting.getTime().equals(time));
     }
 
-    public LocalTime getFilterTime() {
+    /**
+     * Retrieve the {@link LocalTime} currently in-use to filter out {@link Meeting} from
+     * {@link #getAll()}.
+     *
+     * @return A possibly-null {@link LocalTime}.
+     */
+    public @Nullable LocalTime getFilterTime() {
 
         return filterTime;
     }
 
-    public Room getFilterRoom() {
+    /**
+     * Retrieve the {@link Room} currently in-use to filter out {@link Meeting} from
+     * {@link #getAll()}.
+     *
+     * @return A possibly-null {@link Room}.
+     */
+    public @Nullable Room getFilterRoom() {
 
         return filterRoom;
     }

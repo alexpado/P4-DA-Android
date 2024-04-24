@@ -1,8 +1,16 @@
 package fr.alexpado.mareu.interfaces;
 
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextWatcher;
 
+/**
+ * Interface allowing to simplify the use of {@link TextWatcher} when the goal of the listener is
+ * just to retrieve the final {@link Editable} text content.
+ *
+ * @see #afterTextChanged(Editable)
+ * @see #onTextChanged(CharSequence, int, int, int)
+ */
 public interface InputChanger extends TextWatcher {
 
     /**
@@ -52,6 +60,7 @@ public interface InputChanger extends TextWatcher {
      */
     @Override
     default void afterTextChanged(Editable s) {
+
         this.onTextChanged(s.toString());
     }
 

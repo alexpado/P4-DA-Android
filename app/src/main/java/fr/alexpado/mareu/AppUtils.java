@@ -59,6 +59,14 @@ public final class AppUtils {
         return Optional.ofNullable(text.getText()).orElse("").toString();
     }
 
+    /**
+     * Retrieve a usable {@link ActionBar} from the provided {@link Fragment}.
+     *
+     * @param fragment
+     *         The {@link Fragment} from which the {@link ActionBar} will be retrieved.
+     *
+     * @return An {@link ActionBar}
+     */
     public static ActionBar getBarFrom(Fragment fragment) {
 
         AppCompatActivity activity = (AppCompatActivity) fragment.getActivity();

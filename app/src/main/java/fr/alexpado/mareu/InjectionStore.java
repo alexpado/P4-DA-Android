@@ -25,6 +25,11 @@ public final class InjectionStore {
 
     private InjectionStore() {}
 
+    /**
+     * Retrieve a singleton instance of {@link UserRepository}.
+     *
+     * @return A {@link UserRepository} singleton implementation instance
+     */
     public static UserRepository userRepository() {
 
         if (userRepository == null) {
@@ -33,6 +38,11 @@ public final class InjectionStore {
         return userRepository;
     }
 
+    /**
+     * Retrieve a singleton instance of {@link RoomRepository}.
+     *
+     * @return A {@link RoomRepository} singleton implementation instance
+     */
     public static RoomRepository roomRepository() {
 
         if (roomRepository == null) {
@@ -41,6 +51,11 @@ public final class InjectionStore {
         return roomRepository;
     }
 
+    /**
+     * Retrieve a singleton instance of {@link MeetingRepository}.
+     *
+     * @return A {@link MeetingRepository} singleton implementation instance
+     */
     public static MeetingRepository meetingRepository() {
 
         if (meetingRepository == null) {
@@ -49,6 +64,11 @@ public final class InjectionStore {
         return meetingRepository;
     }
 
+    /**
+     * Retrieve a singleton instance of {@link UserService}.
+     *
+     * @return A {@link UserService} singleton implementation instance
+     */
     public static UserService userService() {
 
         if (userService == null) {
@@ -57,6 +77,11 @@ public final class InjectionStore {
         return userService;
     }
 
+    /**
+     * Retrieve a singleton instance of {@link RoomService}.
+     *
+     * @return A {@link RoomService} singleton implementation instance
+     */
     public static RoomService roomService() {
 
         if (roomService == null) {
@@ -65,6 +90,11 @@ public final class InjectionStore {
         return roomService;
     }
 
+    /**
+     * Retrieve a singleton instance of {@link UserRepository}.
+     *
+     * @return A {@link UserRepository} singleton implementation instance
+     */
     public static MeetingService meetingService() {
 
         if (meetingService == null) {

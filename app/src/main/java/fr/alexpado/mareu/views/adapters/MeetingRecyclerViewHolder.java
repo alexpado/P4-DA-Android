@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import fr.alexpado.mareu.R;
+import fr.alexpado.mareu.entities.Meeting;
 
 /**
  * Class representing a UI element within {@link MeetingRecyclerViewAdapter}. This contains
@@ -37,21 +38,41 @@ public class MeetingRecyclerViewHolder extends RecyclerView.ViewHolder {
         this.uiMeetingActionDelete = itemView.findViewById(R.id.meeting_list_item_action_delete);
     }
 
+    /**
+     * Retrieve the {@link ImageView} to use to display the colored circle for a {@link Meeting}.
+     *
+     * @return An {@link ImageView}
+     */
     public ImageView getUiMeetingThumbnail() {
 
         return this.uiMeetingThumbnail;
     }
 
+    /**
+     * Retrieve the {@link TextView} to use to display the name for a {@link Meeting}.
+     *
+     * @return A {@link TextView}
+     */
     public TextView getUiMeetingName() {
 
         return this.uiMeetingName;
     }
 
+    /**
+     * Retrieve the {@link TextView} to use to display the description for a {@link Meeting}.
+     *
+     * @return A {@link TextView}
+     */
     public TextView getUiMeetingDescription() {
 
         return this.uiMeetingDescription;
     }
 
+    /**
+     * Retrieve the {@link Button} to trigger the removal of a {@link Meeting}.
+     *
+     * @return A {@link Button}
+     */
     public Button getUiMeetingActionDelete() {
 
         return this.uiMeetingActionDelete;
