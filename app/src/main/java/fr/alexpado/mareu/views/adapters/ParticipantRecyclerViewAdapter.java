@@ -130,6 +130,7 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         holder.getUiMail().setText(user.getMail());
         // Default state
         holder.getUiCheck().setChecked(this.isChecked(user));
+        holder.getUiCheck().setContentDescription(holder.itemView.getResources().getString(R.string.accessibility_check_participant, user.getMail()));
         holder.getUiCheck()
               .setOnCheckedChangeListener((v, checked) -> this.selectedUsers.replace(
                       user,

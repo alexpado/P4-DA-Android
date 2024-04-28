@@ -1,6 +1,7 @@
 package fr.alexpado.mareu.views;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Optional;
 
 import fr.alexpado.mareu.AppUtils;
@@ -70,6 +73,7 @@ public class FilterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        Resources res = this.getResources();
         this.service = InjectionStore.meetingService();
         this.timePicker = this.createPicker();
 
@@ -96,6 +100,9 @@ public class FilterFragment extends Fragment {
 
         this.binding.unsetRoomFilter.setOnClickListener(this::resetRoomFilterButtonClick);
         this.binding.unsetTimeFilter.setOnClickListener(this::resetTimeFilterButtonClick);
+
+        this.binding.unsetRoomFilter.setContentDescription(res.getString(R.string.accessibility_remove_room_filter));
+        this.binding.unsetTimeFilter.setContentDescription(res.getString(R.string.accessibility_remove_time_filter));
 
         this.timePicker.addOnPositiveButtonClickListener(v -> {
             int hour = this.timePicker.getHour();
@@ -143,11 +150,17 @@ public class FilterFragment extends Fragment {
      */
     private void handleRoomChange(String roomName) {
 
+        Resources res = this.getResources();
+
         if (roomName.equals("")) {
             if (this.service.hasFilter(MeetingService.FILTER_ROOM_NAME)) {
                 this.service.setRoomFilter(null);
                 this.binding.filterMeetingRoom.setText("");
             }
+
+            this.binding.filterMeetingRoom.setContentDescription(
+                    res.getString(R.string.accessibility_define_room_filter)
+            );
             return;
         }
 
@@ -157,6 +170,9 @@ public class FilterFragment extends Fragment {
         if (roomByName.isPresent()) {
             Room room = roomByName.get();
             this.service.setRoomFilter(room);
+            this.binding.filterMeetingRoom.setContentDescription(
+                    res.getString(R.string.accessibility_update_room_filter, room.getName())
+            );
         } else {
             this.handleRoomChange("");
         }
@@ -170,11 +186,18 @@ public class FilterFragment extends Fragment {
      */
     private void handleTimeChange(Integer hour, Integer minute) {
 
+        Resources res = this.getResources();
+        DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+
         if (hour == null || minute == null) {
             if (this.service.hasFilter(MeetingService.FILTER_TIME_NAME)) {
                 this.service.setTimeFilter(null);
                 this.binding.filterMeetingTime.setText("");
             }
+
+            this.binding.filterMeetingTime.setContentDescription(
+                    res.getString(R.string.accessibility_define_time_filter)
+            );
             return;
         }
 
@@ -184,5 +207,10 @@ public class FilterFragment extends Fragment {
 
         this.service.setTimeFilter(time);
         this.binding.filterMeetingTime.setText(strFormat);
+
+        this.binding.filterMeetingRoom.setContentDescription(
+                res.getString(R.string.accessibility_update_room_filter, dtf.format(time))
+        );
     }
+
 }

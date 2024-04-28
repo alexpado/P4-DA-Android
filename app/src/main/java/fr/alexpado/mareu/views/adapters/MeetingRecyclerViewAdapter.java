@@ -1,5 +1,6 @@
 package fr.alexpado.mareu.views.adapters;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,6 +83,16 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
         holder.getUiMeetingActionDelete()
               .setOnClickListener(v -> this.listener.onMeetingDeleted(meeting));
+
+        Resources res = holder.itemView.getContext().getResources();
+        DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM);
+
+        holder.getUiMeetingActionDelete().setContentDescription(
+                res.getString(
+                        R.string.accessibility_remove_meeting,
+                        meeting.getSubject(),
+                        dtf.format(meeting.getTime())
+                ));
     }
 
     @Override

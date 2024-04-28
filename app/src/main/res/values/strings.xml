@@ -22,4 +22,13 @@
     <string name="filter_meeting_time_remove_accessibility">Delete Meeting Time Filter</string>
 
     <string name="participant_mail">Participant Mail</string>
+
+    <string name="accessibility_remove_meeting">Delete meeting %1$s taking place at %2$s</string>
+    <string name="accessibility_remove_room_filter">Remove the room filter</string>
+    <string name="accessibility_remove_time_filter">Remove the time filter</string>
+    <string name="accessibility_define_room_filter">Define the room filter</string>
+    <string name="accessibility_define_time_filter">Define the time filter</string>
+    <string name="accessibility_update_room_filter">Change the room filter. Currently set to: %s</string>
+    <string name="accessibility_update_time_filter">Change the time filter> Currently set to: %s</string>
+    <string name="accessibility_check_participant">Check state for mail %s</string>
 </resources>
