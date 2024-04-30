@@ -217,7 +217,7 @@ public class BookingFragment extends Fragment {
             if (optionalUser.isPresent()) {
                 this.userAdapter.setCheckedState(optionalUser.get(), true);
             } else {
-                this.userAdapter.addUser(userService.createUser(mail), true);
+                this.userAdapter.addUser(userService.createUser(mail), false);
             }
 
             this.binding.addParticipantMail.setText("");
